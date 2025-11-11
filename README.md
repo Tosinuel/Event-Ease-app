@@ -13,7 +13,7 @@ Features included in this scaffold:
 How to run (requires .NET 8 SDK):
 
 ```powershell
-cd "c:\Users\expre\Documents\C# Programming\Event-Ease-App"
+cd "Event-Ease-App"
 dotnet restore
 dotnet build
 dotnet run --project EventEase.Client.csproj
