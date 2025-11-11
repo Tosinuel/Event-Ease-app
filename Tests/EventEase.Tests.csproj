@@ -20,4 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EventEase.Client.csproj" />
   </ItemGroup>
+  <PackageReference Include="Bunit" Version="1.26.64" />
+<PackageReference Include="xunit" Version="2.4.2" />
+<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
 </Project>
