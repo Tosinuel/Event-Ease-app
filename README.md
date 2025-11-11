@@ -21,4 +21,3 @@ dotnet run --project EventEase.Client.csproj
 
 Notes and next steps: add persistent storage, authentication, and deploy to GitHub Pages or a static host with an API backend.
 
-Copilot assistance summary: Copilot helped generate component scaffolding, validation attributes, mock data generator, and suggested using Virtualize for performance.
