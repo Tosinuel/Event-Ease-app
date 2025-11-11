@@ -1,0 +1,30 @@
+@page "/events/{Id:int}"
+@using EventEase.Models
+@inject Services.EventService EventService
+@inject NavigationManager NavigationManager
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private EventModel? EventItem;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        EventItem = await EventService.GetEventByIdAsync(Id);
+        if (EventItem == null)
+        {
+            // Gracefully handle invalid ids
+            NavigationManager.NavigateTo("/notfound");
+        }
+    }
+}
+
+@if (EventItem != null)
+{
+    <h2>@EventItem.Name</h2>
+    <p><strong>Date:</strong> @EventItem.Date.ToString("f")</p>
+    <p><strong>Location:</strong> @EventItem.Location</p>
+    <p>@EventItem.Description</p>
+    <a class="btn btn-primary" href="/register/@EventItem.Id">Register</a>
+}

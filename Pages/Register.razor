@@ -1,0 +1,62 @@
+@page "/register/{EventId:int?}"
+@using System.ComponentModel.DataAnnotations
+@using EventEase.Models
+@inject Services.EventService EventService
+@inject Services.AttendanceService AttendanceService
+@inject Services.AppState AppState
+@inject NavigationManager NavigationManager
+
+<h3>Register for event</h3>
+
+@if (selectedEvent == null && EventId.HasValue)
+{
+    <p>Loading event...</p>
+}
+
+<EditForm Model="registration" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Name</label>
+        <InputText @bind-Value="registration.Name" />
+    </div>
+    <div>
+        <label>Email</label>
+        <InputText @bind-Value="registration.Email" />
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? EventId { get; set; }
+
+    RegistrationModel registration = new RegistrationModel();
+    EventModel? selectedEvent;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (EventId.HasValue)
+        {
+            selectedEvent = await EventService.GetEventByIdAsync(EventId.Value);
+            if (selectedEvent == null)
+            {
+                NavigationManager.NavigateTo("/notfound");
+            }
+        }
+    }
+
+    void HandleValidSubmit()
+    {
+        // store session info
+        AppState.CurrentUser = registration;
+        if (EventId.HasValue)
+        {
+            AttendanceService.AddAttendance(EventId.Value, registration);
+            NavigationManager.NavigateTo($"/attendance");
+        }
+    }
+}

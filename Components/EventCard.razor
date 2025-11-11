@@ -1,0 +1,39 @@
+@using System.ComponentModel.DataAnnotations
+@using EventEase.Models
+
+@typeparam TItem
+
+<div class="event-card">
+    <EditForm Model="Event" OnValidSubmit="OnValid">
+        <DataAnnotationsValidator />
+        <div>
+            <label>Event Name</label>
+            <InputText @bind-Value="Event.Name" />
+        </div>
+        <div>
+            <label>Date</label>
+            <InputDate @bind-Value="Event.Date" />
+        </div>
+        <div>
+            <label>Location</label>
+            <InputText @bind-Value="Event.Location" />
+        </div>
+        <div>
+            <button type="button" @onclick="(()=>OnNavigateToDetails?.Invoke(Event.Id))">Details</button>
+            <button type="submit">Save</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public EventModel Event { get; set; } = new EventModel();
+
+    [Parameter]
+    public Action<int>? OnNavigateToDetails { get; set; }
+
+    void OnValid()
+    {
+        // Edits are bound to the underlying model. In a real app we'd persist changes via a service.
+    }
+}

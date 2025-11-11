@@ -1,0 +1,29 @@
+@page "/"
+@using EventEase.Models
+@inject Services.EventService EventService
+@inject NavigationManager NavigationManager
+
+<h2>Upcoming Events</h2>
+
+<Virtualize ItemsProvider="LoadEvents" Context="evt">
+    <ItemContent>
+        <EventCard Event="evt" OnNavigateToDetails="NavigateToDetails" />
+    </ItemContent>
+</Virtualize>
+
+@code {
+    private async ValueTask<ItemsProviderResult<EventModel>> LoadEvents(ItemsProviderRequest request)
+    {
+        // Use the EventService to fetch a slice for virtualization
+        var items = await EventService.GetEventsAsync();
+        var start = request.StartIndex;
+        var count = Math.Min(request.Count, items.Count - start);
+        var page = items.Skip(start).Take(count).ToList();
+        return new ItemsProviderResult<EventModel>(page, items.Count);
+    }
+
+    void NavigateToDetails(int id)
+    {
+        NavigationManager.NavigateTo($"/events/{id}");
+    }
+}

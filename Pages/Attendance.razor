@@ -1,0 +1,18 @@
+@page "/attendance"
+@using EventEase.Models
+@inject Services.AttendanceService AttendanceService
+
+<h3>Attendance</h3>
+
+@foreach (var kv in AttendanceService.GetAllAttendance())
+{
+    <div>
+        <h4>Event @kv.Key — @kv.Value.Count attendees</h4>
+        <ul>
+            @foreach (var r in kv.Value)
+            {
+                <li>@r.Name (@r.Email)</li>
+            }
+        </ul>
+    </div>
+}
